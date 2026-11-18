@@ -3,7 +3,14 @@ async function request(path, options) {
     ...options,
     credentials: 'include',
   });
-  const data = await response.json();
+  const contentType = response.headers.get('content-type') || '';
+  let data = {};
+  if (contentType.includes('application/json')) {
+    data = await response.json();
+  } else {
+    const text = await response.text();
+    if (text) data = { error: text };
+  }
   if (!response.ok) {
     const error = new Error(data.error || 'The request could not be completed.');
     error.status = response.status;
