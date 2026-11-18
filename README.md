@@ -36,6 +36,16 @@ npm start
 
 The server serves `dist/` and the API from the same origin on port 3001. Set `PORT` to change the server port.
 
+## Vercel deployment storage
+
+For persistent bookings and signups on Vercel, add a Redis/KV integration and expose these environment variables:
+
+- `JWT_SECRET`
+- `KV_REST_API_URL`
+- `KV_REST_API_TOKEN`
+
+Without KV variables, the serverless fallback uses temporary `/tmp` storage and in-process memory; data may not persist across deployments or cold starts. The hardcoded admin and user accounts continue to work without user storage.
+
 ## API endpoints
 
 | Method | Path | Purpose |
