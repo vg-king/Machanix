@@ -1,0 +1,36 @@
+{
+  "name": "machanix-bhubaneswar-recreation",
+  "private": true,
+  "version": "1.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n API,WEB -c blue,green \"npm:server:dev\" \"npm:client:dev\"",
+    "server:dev": "node --watch backend/server.js",
+    "client:dev": "vite --host 0.0.0.0",
+    "start": "node backend/server.js",
+    "build": "vite build",
+    "test": "node --test",
+    "preview": "vite preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "bcryptjs": "^3.0.3",
+    "concurrently": "9.1.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.4",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "0.468.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "^7.18.5",
+    "vite": "5.4.14",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.2"
+  }
+}

@@ -1,0 +1,26 @@
+You are a senior frontend engineer specializing in high-fidelity website recreation.
+
+PROJECT GOAL
+Build a responsive, polished Machanix frontend for car servicing in Bhubaneswar. Match the intended layout, proportions, spacing, typography, colors, hierarchy, and interactions while keeping all branding consistent with Machanix.
+
+REFERENCE PAGE CONTENT / STRUCTURE
+- White sticky header with a red/charcoal auto-service brand mark, selected city (Bhubaneswar), a service search input, navigation links (How it works, Reviews, FAQs, Login), and a horizontally scrollable service-category navigation.
+- Category navigation for Car Services, AC Service & Repair, Batteries, Tyres & Wheel Care, Denting & Painting, Detailing Services, Car Spa & Cleaning, Car Inspections, and SOS Service.
+- Hero area with a prominent car service headline for Bhubaneswar, short trust/value proposition, rating/trust information, convenience/quality/clear-estimate highlights, and a strong service quote/vehicle-selection flow.
+- Vehicle selection fields: car brand, model (dependent on selected make), and fuel type. Main CTA should validate inputs and open a clear next-step modal/demo quote.
+- Scheduled package cards for Basic Service, Standard Service, Comprehensive Service. Each should include interval, estimated duration, warranty/inclusion details, savings copy, illustrative price, and Select Car CTA.
+- Service-directory grid for AC, batteries, tyres, denting/painting, cleaning/detailing, diagnostics/inspection, clutch/body parts, and lights/windshields. Include live search/filtering.
+- Trust metrics / benefits, how-it-works steps, testimonial-style layout (clearly labelled as placeholder demo content, not real reviews), FAQ accordion, final CTA, and footer.
+
+IMPLEMENTATION
+- Use React + Vite and clean component structure; use plain CSS or CSS modules (no Tailwind requirement).
+- Maintain a close red/charcoal/white visual language, clean sans-serif typography, lightly rounded cards, subtle borders/shadows, and responsive desktop/tablet/mobile layouts.
+- Use lucide-react icons or neat inline SVGs. Avoid random broken image links; use dependable local/remote imagery or CSS/inline-SVG illustrations with graceful fallbacks.
+- Make every visible button/link useful. Search should filter the services; car model options should depend on make; city selector should change its selected city; FAQ items should expand/collapse; CTAs should scroll/open the relevant UI.
+- Implement accessible labels, keyboard focus, visible hover/focus states, semantic headings, responsive navigation, and reduced-motion support.
+- Do not connect a real payment, booking, login, or personal-data service unless explicitly configured. Clearly label the booking flow as a frontend demo.
+- Do not claim placeholder metrics, prices, ratings, reviews, or availability are verified. Mark prices and example reviews as illustrative.
+- Ensure `npm install`, `npm run dev`, and `npm run build` work. Fix all errors before finishing.
+
+FINAL CHECK
+Compare the rendered local page against the reference at desktop (1440px), tablet (768px), and mobile (390px). Prioritize the header, hero, car selector, service cards, typography, whitespace, and card proportions. Report any remaining differences caused by the reference site's dynamic content or unavailable assets.

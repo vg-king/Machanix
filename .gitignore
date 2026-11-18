@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.env
+backend/data/users.json
+backend/data/bookings.json
