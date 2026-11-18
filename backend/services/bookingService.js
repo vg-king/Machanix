@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { kv } from '@vercel/kv';
+import { hasPersistentStore, persistentGet, persistentSet } from './persistentStore.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = path.resolve(__dirname, '../data');
@@ -10,11 +10,11 @@ let storageQueue = Promise.resolve();
 export const BOOKING_STATUSES = ['PENDING', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'];
 const BOOKINGS_KEY = 'machanix:bookings';
 let memoryBookings = null;
-const hasKvStorage = Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+const hasPersistentStorage = () => hasPersistentStore();
 const deployedDataFile = '/tmp/machanix-bookings.json';
 
 export async function ensureStorage() {
-  if (hasKvStorage) return;
+  if (hasPersistentStorage()) return;
   await mkdir(dataDir, { recursive: true });
   const target = process.env.VERCEL ? deployedDataFile : bookingsFile;
   try { await readFile(target, 'utf8'); }
@@ -24,8 +24,9 @@ export async function ensureStorage() {
 export async function readBookings() {
   await ensureStorage();
   let value;
-  if (hasKvStorage) {
-    value = await kv.get(BOOKINGS_KEY);
+  if (hasPersistentStorage()) {
+    try { value = await persistentGet(BOOKINGS_KEY); }
+    catch { value = memoryBookings; }
   } else if (process.env.VERCEL) {
     try { value = JSON.parse(await readFile(deployedDataFile, 'utf8')); }
     catch { value = memoryBookings; }
@@ -44,9 +45,11 @@ export async function readBookings() {
 
 async function writeBookings(bookings) {
   memoryBookings = bookings;
-  if (hasKvStorage) {
-    await kv.set(BOOKINGS_KEY, bookings);
-    return;
+  if (hasPersistentStorage()) {
+    try {
+      await persistentSet(BOOKINGS_KEY, bookings);
+      return;
+    } catch {}
   }
   if (process.env.VERCEL) {
     try {

@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import bcrypt from 'bcryptjs';
 import { getDemoUsers } from '../data/demoUsers.js';
-import { kv } from '@vercel/kv';
+import { hasPersistentStore, persistentGet, persistentSet } from './persistentStore.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = path.resolve(__dirname, '../data');
@@ -12,11 +12,11 @@ const usersFile = path.join(dataDir, 'users.json');
 let storageQueue = Promise.resolve();
 const USERS_KEY = 'machanix:users';
 let memoryUsers = null;
-const hasKvStorage = Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+const hasPersistentStorage = () => hasPersistentStore();
 const deployedUsersFile = '/tmp/machanix-users.json';
 
 export async function ensureUserStorage() {
-  if (hasKvStorage) return;
+  if (hasPersistentStorage()) return;
   await mkdir(dataDir, { recursive: true });
   const target = process.env.VERCEL ? deployedUsersFile : usersFile;
   try { await readFile(target, 'utf8'); }
@@ -26,8 +26,9 @@ export async function ensureUserStorage() {
 export async function readUsers() {
   await ensureUserStorage();
   let value;
-  if (hasKvStorage) {
-    value = await kv.get(USERS_KEY);
+  if (hasPersistentStorage()) {
+    try { value = await persistentGet(USERS_KEY); }
+    catch { value = memoryUsers; }
   } else if (process.env.VERCEL) {
     try { value = JSON.parse(await readFile(deployedUsersFile, 'utf8')); }
     catch { value = memoryUsers; }
@@ -40,9 +41,11 @@ export async function readUsers() {
 
 async function writeUsers(users) {
   memoryUsers = users;
-  if (hasKvStorage) {
-    await kv.set(USERS_KEY, users);
-    return;
+  if (hasPersistentStorage()) {
+    try {
+      await persistentSet(USERS_KEY, users);
+      return;
+    } catch {}
   }
   if (process.env.VERCEL) {
     try {

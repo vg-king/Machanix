@@ -43,6 +43,7 @@ For persistent bookings and signups on Vercel, add a Redis/KV integration and ex
 - `JWT_SECRET`
 - `KV_REST_API_URL`
 - `KV_REST_API_TOKEN`
+- `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` are also supported
 
 Without KV variables, the serverless fallback uses temporary `/tmp` storage and in-process memory; data may not persist across deployments or cold starts. The hardcoded admin and user accounts continue to work without user storage.
 
